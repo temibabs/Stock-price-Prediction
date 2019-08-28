@@ -70,7 +70,7 @@ componentDidMount(){
   //console.log(timeSeries[0]["5. adjusted close"])
 
   for(let i=0; i<date.length; i++){
-         dataT[0]["data"].push(
+         dataT[0]["data"].unshift(
           {
             "x": date[i],
             "y": timeSeries[i]["5. adjusted close"]
@@ -100,7 +100,7 @@ componentDidMount(){
       //console.log("week",timeSeriesWeek);
 
       for(let i=0; i<dateWeek.length; i++){
-        dataTWeek[0]["data"].push(
+        dataTWeek[0]["data"].unshift(
          {
            "x": dateWeek[i],
            "y": timeSeriesWeek[i]["5. adjusted close"]
@@ -174,7 +174,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
         "data":[]
       }];
       for(let i=int1; i<int2; i++){
-        fdate[0]["data"].push(
+        fdate[0]["data"].unshift(
          {
            "x": date[i],
            "y": timeSeries[i]["5. adjusted close"]
