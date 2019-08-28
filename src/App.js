@@ -127,7 +127,8 @@ dateSelected=(e)=>{
           );
         this.setState({dateFrom:e.target.value});
         }else if(e.target.name=="dateTo"){
-          this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
+          this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries);
+          this.setState({dateTo:e.target.value});
         }
      break
     case 'week':
@@ -140,7 +141,8 @@ dateSelected=(e)=>{
             );
           this.setState({dateFrom:e.target.value});
           }else if(e.target.name=="dateTo"){
-            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.dateWeek,this.state.timeSeriesWeek)
+            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.dateWeek,this.state.timeSeriesWeek);
+            this.setState({dateTo:e.target.value});
           }
       break
     case 'month':
@@ -154,6 +156,7 @@ dateSelected=(e)=>{
           this.setState({dateFrom:e.target.value});
           }else if(e.target.name=="dateTo"){
             this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
+            this.setState({dateTo:e.target.value});
           }
       break
  }
