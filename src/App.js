@@ -3,119 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import Graph from './Graph'
 
-//import React from 'react';
-const data =[
-  {
-    "id": "Prediction",
-    "color": "hsl(299, 70%, 50%)",
-    "data": [
-      {
-        "x": "jan1",
-        "y": 157
-      },
-      {
-        "x": "jan2",
-        "y": 295
-      },
-      {
-        "x": "feb4",
-        "y": 49
-      },
-      {
-        "x": "march5",
-        "y": 64
-      },
-      {
-        "x": "april3",
-        "y": 170
-      },
-      {
-        "x": "may2",
-        "y": 183
-      },
-      {
-        "x": "jun3",
-        "y": 159
-      },
-      {
-        "x": "jun4",
-        "y": 244
-      },
-      {
-        "x": "jun5",
-        "y": 284
-      },
-      {
-        "x": "jun6",
-        "y": 50
-      },
-      {
-        "x": "jun7",
-        "y": 225
-      },
-      {
-        "x": "jun8",
-        "y": 16
-      }
-    ]
-  },
-  {
-    "id": "True Valaue",
-    "color": "hsl(0°, 100%, 50%)",
-    "data": [
-      {
-        "x": "jan1",
-        "y": 214
-      },
-      {
-        "x": "jan2",
-        "y": 281
-      },
-      {
-        "x": "feb4",
-        "y": 141
-      },
-      {
-        "x": "march5",
-        "y": 161
-      },
-      {
-        "x": "april3",
-        "y": 258
-      },
-      {
-        "x": "may2",
-        "y": 21
-      },
-      {
-        "x": "jun3",
-        "y": 224
-      },
-      {
-        "x": "jun4",
-        "y": 54
-      },
-      {
-        "x": "jun5",
-        "y": 131
-      },
-      {
-        "x": "jun6",
-        "y": 108
-      },
-      {
-        "x": "jun7",
-        "y": 194
-      },
-      {
-        "x": "jun8",
-        "y": 20
-      }
-    ]
-  }
-  
-]
-
 
 let dataT=[{
   "id": "True",
@@ -338,6 +225,16 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                       </select>
                   </div>
                   <div className="col-md-4">
+                  <label>From :</label><select  name="dateTo" onChange={this.dateSelected} style={{width:"40%"}}>
+                  {option.map(res=>{
+                        //console.log("i am key ",key2);
+                        return(
+                          <option key={key2} value={key2+=1}>{res}</option>
+                        )
+                      })}
+                      </select>
+                  </div>
+                  <div className="col-md-4">
                   <label>To :</label>
                      <select name="dateFrom" onChange={this.dateSelected} style={{width:"40%"}}>
                         {option.map(res=>{
@@ -346,16 +243,6 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                             <option key={key} value={key+=1}>{res}</option>
                           )
                         })}
-                      </select>
-                  </div>
-                  <div className="col-md-4">
-                  <label>From :</label><select  name="dateTo" onChange={this.dateSelected} style={{width:"40%"}}>
-                  {option.map(res=>{
-                        //console.log("i am key ",key2);
-                        return(
-                          <option key={key2} value={key2+=1}>{res}</option>
-                        )
-                      })}
                       </select>
                   </div>
            </div>
