@@ -213,10 +213,10 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
     }
   return (
     <div className="cont">
-       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"450px"}}>
+       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"500px"}}>
           <div className='col-md-12' style={{backgroundColor:'#ffffff'}}>
           <h3 style={{textAlign:'center'}}>Linear Regression</h3>
-           <div style={{height:"300px"}}>
+           <div style={{height:"400px"}}>
              <Graph data={this.state.data1}/>
            </div>
            <div className="row">
@@ -251,26 +251,26 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
            </div>
           </div>
        </div>
-       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"450px"}}>
+       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"500px"}}>
        <div className='col-md-12'  style={{marginright:5,background:"#ffffff"}}>
           <h3 style={{textAlign:'center'}}>Support Vector Machine</h3>
-            <div style={{height:"300px"}}>
+            <div style={{height:"400px"}}>
              <Graph data={this.state.data1}/>
            </div>
           </div>
        </div>
-       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"450px"}}>
+       <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"500px"}}>
        <div className='col-md-12' style={{background:"#ffffff"}}>
             <h3 style={{textAlign:'center'}}>LSTM</h3>
-            <div style={{height:"300px"}}>
+            <div style={{height:"400px"}}>
               <Graph data={this.state.data1}/>
             </div>
           </div>
        </div>
-       <div className='row' style={{width:"99%",background:"blue",margin:2,background:"#ffffff" ,height:"450px",padding:5}}>
+       <div className='row' style={{width:"99%",background:"blue",margin:2,background:"#ffffff" ,height:"500px",padding:5}}>
           <div className='col-md-12'>
           <h3 style={{textAlign:'center'}}>LSTM + LR + SV</h3>
-          <div style={{height:"300px"}}>
+          <div style={{height:"400px"}}>
              <Graph data={this.state.data1}/>
            </div>
           </div>
