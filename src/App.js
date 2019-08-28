@@ -123,32 +123,21 @@ let dataT=[{
     "data":[]
   }
 ]
+let dataTWeek=[{
+  "id": "True",
+    "color": "hsl(299, 70%, 50%)",
+    "data":[]
+  }
+]
+
+let dataTMonth=[{
+  "id": "True",
+    "color": "hsl(299, 70%, 50%)",
+    "data":[]
+  }
+]
 class App extends React.Component{
   state={
-    data:[{
-      "id": "Loading",
-    "color": "hsl(299, 70%, 50%)",
-    "data": [
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      }
-    ]
-    }
-    ],
-
     data1:[{
       "id": "Loading",
     "color": "hsl(299, 70%, 50%)",
@@ -171,89 +160,27 @@ class App extends React.Component{
       }
     ]
     }],
-    data2:[{
-      "id": "Loading",
-    "color": "hsl(299, 70%, 50%)",
-    "data": [
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      }
-    ]
-    }],
-    data3:[{
-      "id": "Loading",
-    "color": "hsl(299, 70%, 50%)",
-    "data": [
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      }
-    ]
-    }],
-    data4:[{
-      "id": "Loading",
-    "color": "hsl(299, 70%, 50%)",
-    "data": [
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      },
-      {
-        "x": "Loading...",
-        "y": "loading..."
-      }
-    ]
-    }],
+   
     timeSeries:[],
     date:[],
     dateSelected:'day',
     dateTo:15,
-    dateFrom:1
+    dateFrom:1,
+    dateWeekFrom:1,
+    dateWeekTo:15,
+    dataWeek:[],timeSeriesWeek:[],dateWeek:[]
   }
-componentWillMount(){
+componentDidMount(){
   fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=full&apikey=demo")
    .then(res=>res.json())
    .then(data=>{
 
     //console.log(data)
-    console.log(Object.keys(data["Time Series (Daily)"]))
+   // console.log(Object.keys(data["Time Series (Daily)"]))
     const timeSeries=Object.values(data["Time Series (Daily)"])
     const date=Object.keys(data["Time Series (Daily)"]);
-  console.log(Object.values(date))
-  console.log(timeSeries[0]["5. adjusted close"])
+  //console.log(Object.values(date))
+  //console.log(timeSeries[0]["5. adjusted close"])
 
   for(let i=0; i<date.length; i++){
          dataT[0]["data"].push(
@@ -264,7 +191,7 @@ componentWillMount(){
          )
     }
 
-    console.log(dataT);
+   // console.log(dataT);
     this.setState({data:dataT,timeSeries:timeSeries,date:date});
     setTimeout(()=>{
       this.updateStateForTimeInterval(0,15,date,timeSeries);
@@ -275,18 +202,85 @@ componentWillMount(){
    .catch(err=>{
      console.log(err)
    })
+   ///////////////////////////////////////////
+   let b=true;
+   if (b){
+     fetch("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSFT&apikey=demo")
+     .then(res=>res.json())
+     .then(data=>{
+      const timeSeriesWeek=Object.values(data["Weekly Adjusted Time Series"])
+      const dateWeek=Object.keys(data["Weekly Adjusted Time Series"]);
+      //console.log("week",timeSeriesWeek);
+
+      for(let i=0; i<dateWeek.length; i++){
+        dataTWeek[0]["data"].push(
+         {
+           "x": dateWeek[i],
+           "y": timeSeriesWeek[i]["5. adjusted close"]
+         }
+        )
+   }// Ends For
+   this.setState({dataWeek:dataTWeek,timeSeriesWeek:timeSeriesWeek,dateWeek:dateWeek});
+     })
+     .catch(err=>console.log("error oo",err));
+   }
+
+    
 }
 dateSelected=(e)=>{
-  console.log("hello",e.target.value);
-  if(e.target.name=="dateFrom"){
-  this.updateStateForTimeInterval(e.target.value,this.state.dateTo,this.state.date,this.state.timeSeries);
-  this.setState({dateFrom:e.target.value});
-  }else if(e.target.name=="dateTo"){
-    this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
-  }
+ // console.log("hello",e.target.value);
+ switch(this.state.dateSelected){
+   case 'day':
+      if(e.target.name=="dateFrom"){
+        this.updateStateForTimeInterval(
+          e.target.value,
+          this.state.dateTo,
+          this.state.date,
+          this.state.timeSeries
+          );
+        this.setState({dateFrom:e.target.value});
+        }else if(e.target.name=="dateTo"){
+          this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
+        }
+     break
+    case 'week':
+        if(e.target.name=="dateFrom"){
+          this.updateStateForTimeInterval(
+            e.target.value,
+            this.state.dateTo,
+            this.state.dateWeek,
+            this.state.timeSeriesWeek
+            );
+          this.setState({dateFrom:e.target.value});
+          }else if(e.target.name=="dateTo"){
+            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.dateWeek,this.state.timeSeriesWeek)
+          }
+      break
+    case 'month':
+        if(e.target.name=="dateFrom"){
+          this.updateStateForTimeInterval(
+            e.target.value,
+            this.state.dateTo,
+            this.state.date,
+            this.state.timeSeries
+            );
+          this.setState({dateFrom:e.target.value});
+          }else if(e.target.name=="dateTo"){
+            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
+          }
+      break
+ }
+ 
 }
+monthChange=(e)=>{
+  // e.preventDefaults();
+   this.setState({dateSelected:e.target.value});
+   this.updateStateForTimeInterval(0,15,this.state.dateWeek,this.state.timeSeriesWeek)
+
+}
+
 updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
-  console.log("from updateForTime",timeSeries,int1,int2)
+  //console.log("from updateForTime",timeSeries,int1,int2)
     let fdate=[{
       "id": "True",
         "color": "hsl(299, 70%, 50%)",
@@ -314,6 +308,18 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
         key2=-1;
         console.log(option)
         break
+      case 'week':
+          option=this.state.dateWeek
+          key=-1;
+          key2=-1;
+          console.log(option)
+          break
+      case 'month':
+          option=this.state.dateWeek
+          key=-1;
+          key2=-1;
+          console.log(option)
+          break
     }
   return (
     <div className="cont">
@@ -325,14 +331,14 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
            </div>
            <div className="row">
                   <div className="col-md-4">
-                      <select  style={{width:"40%"}}>
-                        <option>Daily</option>
-                        <option>Monthly</option>
-                        <option>Weekly</option>
+                      <select onChange={this.monthChange}  style={{width:"40%"}}>
+                        <option value="day">Daily</option>
+                        <option value="month">Monthly</option>
+                        <option value="week">Weekly</option>
                       </select>
                   </div>
                   <div className="col-md-4">
-                  <label>From :</label>
+                  <label>To :</label>
                      <select name="dateFrom" onChange={this.dateSelected} style={{width:"40%"}}>
                         {option.map(res=>{
                         
@@ -343,7 +349,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                       </select>
                   </div>
                   <div className="col-md-4">
-                  <label>To :</label><select  name="dateTo" onChange={this.dateSelected} style={{width:"40%"}}>
+                  <label>From :</label><select  name="dateTo" onChange={this.dateSelected} style={{width:"40%"}}>
                   {option.map(res=>{
                         //console.log("i am key ",key2);
                         return(
