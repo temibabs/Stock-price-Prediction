@@ -53,7 +53,7 @@ class App extends React.Component{
     date:[],
     dateSelected:'day',
     dateTo:15,
-    dateFrom:1,
+    dateFrom:0,
     loading:true
   }
 
@@ -227,6 +227,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
         "color": "hsl(299, 70%, 50%)",
         "data":[]
       }];
+
       for(let i=int1; i<int2; i++){
         fdate[0]["data"].unshift(
          {
@@ -265,10 +266,10 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                   </div>
                   <div className="col-md-4">
                   <label>From :</label><select  name="dateTo" onChange={this.dateSelected} style={{width:"40%"}}>
-                  {option.map(res=>{
+                  {option.map((res,i)=>{
                         //console.log("i am key ",key2);
                         return(
-                          <option key={key2} value={key2+=1}>{res}</option>
+                          <option key={i} value={i}>{res}</option>
                         )
                       })}
                       </select>
@@ -276,10 +277,10 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                   <div className="col-md-4">
                   <label>To :</label>
                      <select name="dateFrom" onChange={this.dateSelected} style={{width:"40%"}}>
-                        {option.map(res=>{
+                        {option.map((res,i)=>{
                         
                           return(
-                            <option key={key} value={key+=1}>{res}</option>
+                            <option key={i} value={i}>{res}</option>
                           )
                         })}
                       </select>
