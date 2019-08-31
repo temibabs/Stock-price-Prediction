@@ -293,7 +293,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
                   {option.map((res,i)=>{
                         //console.log("i am key ",key2);
                         return(
-                          <option key={i} value={i}>{res}</option>
+                          <option selected={i==15} key={i} value={i}>{res}</option>
                         )
                       })}
                       </select>
