@@ -282,10 +282,10 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
            </div>
            <div className="row">
                   <div className="col-md-4">
-                      <select onChange={this.datechange}  style={{width:"40%"}}>
+                      <select onChange={this.datechange}   style={{width:"40%"}}>
                         <option value="day">Daily</option>
-                        <option value="month">Monthly</option>
                         <option value="week">Weekly</option>
+                        <option value="month">Monthly</option>
                       </select>
                   </div>
                   <div className="col-md-4">
