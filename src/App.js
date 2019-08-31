@@ -228,7 +228,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
         "data":[]
       }];
 
-      for(let i=int1; i<int2; i++){
+      for(let i=int1; i<=int2; i++){
         fdate[0]["data"].unshift(
          {
            "x": date[i],
