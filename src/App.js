@@ -1,7 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
-import Graph from './Graph'
+import Graph from './Graph';
+import Loading from './loading/loading';
 
 
 let dataT=[{
@@ -10,7 +11,7 @@ let dataT=[{
     "data":[]
   }
 ]
-let dataTWeek=[{
+/*let dataTWeek=[{
   "id": "True",
     "color": "hsl(299, 70%, 50%)",
     "data":[]
@@ -22,7 +23,7 @@ let dataTMonth=[{
     "color": "hsl(299, 70%, 50%)",
     "data":[]
   }
-]
+]*/
 class App extends React.Component{
   state={
     data1:[{
@@ -53,10 +54,9 @@ class App extends React.Component{
     dateSelected:'day',
     dateTo:15,
     dateFrom:1,
-    dateWeekFrom:1,
-    dateWeekTo:15,
-    dataWeek:[],timeSeriesWeek:[],dateWeek:[]
+    loading:true
   }
+
 componentDidMount(){
   fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=full&apikey=demo")
    .then(res=>res.json())
@@ -79,7 +79,7 @@ componentDidMount(){
     }
 
    // console.log(dataT);
-    this.setState({data:dataT,timeSeries:timeSeries,date:date});
+   this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
     setTimeout(()=>{
       this.updateStateForTimeInterval(0,15,date,timeSeries);
     },1000)
@@ -90,35 +90,14 @@ componentDidMount(){
      console.log(err)
    })
    ///////////////////////////////////////////
-   let b=true;
-   if (b){
-     fetch("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSFT&apikey=demo")
-     .then(res=>res.json())
-     .then(data=>{
-      const timeSeriesWeek=Object.values(data["Weekly Adjusted Time Series"])
-      const dateWeek=Object.keys(data["Weekly Adjusted Time Series"]);
-      //console.log("week",timeSeriesWeek);
-
-      for(let i=0; i<dateWeek.length; i++){
-        dataTWeek[0]["data"].unshift(
-         {
-           "x": dateWeek[i],
-           "y": timeSeriesWeek[i]["5. adjusted close"]
-         }
-        )
-   }// Ends For
-   this.setState({dataWeek:dataTWeek,timeSeriesWeek:timeSeriesWeek,dateWeek:dateWeek});
-     })
-     .catch(err=>console.log("error oo",err));
-   }
-
-    
 }
+
+
+
 dateSelected=(e)=>{
  // console.log("hello",e.target.value);
- switch(this.state.dateSelected){
-   case 'day':
-      if(e.target.name=="dateFrom"){
+
+      if(e.target.name==="dateFrom"){
         this.updateStateForTimeInterval(
           e.target.value,
           this.state.dateTo,
@@ -126,46 +105,118 @@ dateSelected=(e)=>{
           this.state.timeSeries
           );
         this.setState({dateFrom:e.target.value});
-        }else if(e.target.name=="dateTo"){
+        }else if(e.target.name==="dateTo"){
           this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries);
           this.setState({dateTo:e.target.value});
         }
-     break
-    case 'week':
-        if(e.target.name=="dateFrom"){
-          this.updateStateForTimeInterval(
-            e.target.value,
-            this.state.dateTo,
-            this.state.dateWeek,
-            this.state.timeSeriesWeek
-            );
-          this.setState({dateFrom:e.target.value});
-          }else if(e.target.name=="dateTo"){
-            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.dateWeek,this.state.timeSeriesWeek);
-            this.setState({dateTo:e.target.value});
-          }
-      break
-    case 'month':
-        if(e.target.name=="dateFrom"){
-          this.updateStateForTimeInterval(
-            e.target.value,
-            this.state.dateTo,
-            this.state.date,
-            this.state.timeSeries
-            );
-          this.setState({dateFrom:e.target.value});
-          }else if(e.target.name=="dateTo"){
-            this.updateStateForTimeInterval(this.state.dateFrom,e.target.value,this.state.date,this.state.timeSeries)
-            this.setState({dateTo:e.target.value});
-          }
-      break
- }
- 
 }
-monthChange=(e)=>{
+
+datechange=(e)=>{
+  this.setState({loading:true});
+  switch(e.target.value){
+    case "day" :
+        fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=full&apikey=demo")
+        .then(res=>res.json())
+        .then(data=>{
+       //console.log(data)
+        // console.log(Object.keys(data["Time Series (Daily)"]))
+         const timeSeries=Object.values(data["Time Series (Daily)"])
+         const date=Object.keys(data["Time Series (Daily)"]);
+       //console.log(Object.values(date))
+       //console.log(timeSeries[0]["5. adjusted close"])
+       for(let i=0; i<date.length; i++){
+              dataT[0]["data"].unshift(
+               {
+                 "x": date[i],
+                 "y": timeSeries[i]["5. adjusted close"]
+               }
+              )
+         }
+        this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
+         setTimeout(()=>{
+           this.updateStateForTimeInterval(0,15,date,timeSeries);
+         },1000)
+         
+     
+       })
+        .catch(err=>{
+          console.log(err)
+        })
+    break 
+    case "week":
+        fetch("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSFT&apikey=demo")
+   .then(res=>res.json())
+   .then(data=>{
+
+    console.log("Weekly Adjusted Prices and Volumes",data)
+   // console.log(Object.keys(data["Time Series (Daily)"]))
+    const timeSeries=Object.values(data["Weekly Adjusted Time Series"])
+    const date=Object.keys(data["Weekly Adjusted Time Series"]);
+  //console.log(Object.values(date))
+  //console.log(timeSeries[0]["5. adjusted close"])
+
+  for(let i=0; i<date.length; i++){
+         dataT[0]["data"].unshift(
+          {
+            "x": date[i],
+            "y": timeSeries[i]["5. adjusted close"]
+          }
+         )
+    }
+
+   // console.log(dataT);
+   this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
+    setTimeout(()=>{
+      this.updateStateForTimeInterval(0,15,date,timeSeries);
+    },1000)
+    
+
+  })
+   .catch(err=>{
+     console.log(err)
+   })
+   break   
+   
+   case "month":
+      fetch("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSFT&apikey=demo")
+      .then(res=>res.json())
+      .then(data=>{
+         
+       console.log(data)
+      // console.log(Object.keys(data["Time Series (Daily)"]))
+       const timeSeries=Object.values(data["Monthly Adjusted Time Series"])
+       const date=Object.keys(data["Monthly Adjusted Time Series"]);
+     //console.log(Object.values(date))
+     //console.log(timeSeries[0]["5. adjusted close"])
+   
+     for(let i=0; i<date.length; i++){
+            dataT[0]["data"].unshift(
+             {
+               "x": date[i],
+               "y": timeSeries[i]["5. adjusted close"]
+             }
+            )
+       }
+   
+      // console.log(dataT);
+      this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
+       setTimeout(()=>{
+         this.updateStateForTimeInterval(0,15,date,timeSeries);
+       },1000)
+       
+   
+     })
+      .catch(err=>{
+        console.log(err)
+      })
+      break
+
+      default :
+      break
+  }
   // e.preventDefaults();
-   this.setState({dateSelected:e.target.value});
-   this.updateStateForTimeInterval(0,15,this.state.dateWeek,this.state.timeSeriesWeek)
+  /* this.setState({dateSelected:e.target.value});
+   this.updateStateForTimeInterval(0,15,this.state.dateWeek,this.state.timeSeriesWeek)*/
 
 }
 
@@ -189,28 +240,13 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
 
   render(){
     let option=[];
-    let key=0;
-    let key2=0;
-    switch(this.state.dateSelected){
-      case 'day':
+    let key;
+    let key2;
+   
         option=this.state.date
         key=-1;
         key2=-1;
-        console.log(option)
-        break
-      case 'week':
-          option=this.state.dateWeek
-          key=-1;
-          key2=-1;
-          console.log(option)
-          break
-      case 'month':
-          option=this.state.dateWeek
-          key=-1;
-          key2=-1;
-          console.log(option)
-          break
-    }
+      
   return (
     <div className="cont">
        <div className='row' style={{width:"99%",margin:2 ,padding:5,height:"500px"}}>
@@ -221,7 +257,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
            </div>
            <div className="row">
                   <div className="col-md-4">
-                      <select onChange={this.monthChange}  style={{width:"40%"}}>
+                      <select onChange={this.datechange}  style={{width:"40%"}}>
                         <option value="day">Daily</option>
                         <option value="month">Monthly</option>
                         <option value="week">Weekly</option>
@@ -267,7 +303,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
             </div>
           </div>
        </div>
-       <div className='row' style={{width:"99%",background:"blue",margin:2,background:"#ffffff" ,height:"500px",padding:5}}>
+       <div className='row' style={{width:"99%",margin:2,background:"#ffffff" ,height:"500px",padding:5}}>
           <div className='col-md-12'>
           <h3 style={{textAlign:'center'}}>LSTM + LR + SV</h3>
           <div style={{height:"400px"}}>
@@ -275,6 +311,7 @@ updateStateForTimeInterval=(int1,int2,date,timeSeries)=>{
            </div>
           </div>
        </div>
+       {this.state.loading ? <Loading/> : <div style={{display:"none"}}></div>}
    </div>
   
   );
