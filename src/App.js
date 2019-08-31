@@ -47,7 +47,17 @@ class App extends React.Component{
         "y": "loading..."
       }
     ]
-    }],
+    },
+    {
+    "id": "Predicted",
+    "color": "hsl(299, 70%, 50%)",
+    "data": [
+      {
+        "x": "Loading...",
+        "y": "loading..."
+      }]
+    }
+  ],
    
     timeSeries:[],
     date:[],
@@ -78,6 +88,19 @@ componentDidMount(){
          )
     }
 
+    ////////////////////////////////predicted data
+    const dataToPost1={
+      "stock":"MSFT",
+      "from_date":date[date.length-1],
+      "to_date":date[0],
+      "method":"lstm"
+      }
+    fetch('https://stock-pred-api.herokuapp.com/getStock', {
+    method: 'post',
+    body: dataToPost1//JSON.stringify(opts)
+     }).then(res=>{
+        console.log("predicted value",res)
+     }).catch(e=>{console.log(e)});
    // console.log(dataT);
    this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
     setTimeout(()=>{
@@ -132,6 +155,7 @@ datechange=(e)=>{
                }
               )
          }
+        // fetch("stock-pred-api.herokuapp.com/getStock")
         this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
          setTimeout(()=>{
            this.updateStateForTimeInterval(0,15,date,timeSeries);
