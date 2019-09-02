@@ -89,21 +89,6 @@ componentDidMount(){
       "to_date":date[0],
       "method":"lstm"
       }
-    fetch('https://stock-pred-api.herokuapp.com/getStock', {
-    method: 'post',
-   // mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-     },
-    body:JSON.stringify(dataToPost1)
-     }).then(res=>{
-       // console.log("predicted value",res.data)
-       return res.json();
-     }).then(data=>{
-       console.log(data['result'])
-     })
-     .catch(e=>{console.log(e)});
    // console.log(dataT);
    this.setState({Daily:data,data:dataT,timeSeries:timeSeries,date:date,loading:false});
     setTimeout(()=>{

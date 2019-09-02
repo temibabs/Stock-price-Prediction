@@ -145,7 +145,7 @@ datechange=(e)=>{
   this.setState({loading:true});
   switch(e.target.value){
     case "day" :
-        if(this.state.Daily.length==0){
+       
           fetch("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=full&apikey=demo")
           .then(res=>res.json())
           .then(data=>{
@@ -174,31 +174,10 @@ datechange=(e)=>{
           .catch(err=>{
             console.log(err)
           })
-        }else{
-          const data=this.state.Daily;
-          const timeSeries=Object.values(data["Time Series (Daily)"])
-          const date=Object.keys(data["Time Series (Daily)"]);
-        //console.log(Object.values(date))
-        //console.log(timeSeries[0]["5. adjusted close"])
-        for(let i=0; i<date.length; i++){
-               dataT[0]["data"].unshift(
-                {
-                  "x": date[i],
-                  "y": timeSeries[i]["5. adjusted close"]
-                }
-               )
-          }
-         // fetch("stock-pred-api.herokuapp.com/getStock")
-         this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
-          setTimeout(()=>{
-            this.updateStateForTimeInterval(0,15,date,timeSeries);
-          },50)
-          
-        }
-       
+      
     break 
     case "week":
-      if(this.state.Weekly.length==0){
+    
         fetch("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSFT&apikey=demo")
         .then(res=>res.json())
         .then(data=>{
@@ -230,33 +209,11 @@ datechange=(e)=>{
         .catch(err=>{
           console.log(err)
         })
-      }
-      else{
-        const data=this.state.Weekly;
-        const timeSeries=Object.values(data["Weekly Adjusted Time Series"])
-        const date=Object.keys(data["Weekly Adjusted Time Series"]);
-      //console.log(Object.values(date))
-      //console.log(timeSeries[0]["5. adjusted close"])
     
-      for(let i=0; i<date.length; i++){
-             dataT[0]["data"].unshift(
-              {
-                "x": date[i],
-                "y": timeSeries[i]["5. adjusted close"]
-              }
-             )
-        }
-    
-       // console.log(dataT);
-       this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
-        setTimeout(()=>{
-          this.updateStateForTimeInterval(0,15,date,timeSeries);
-        },10)
-      }  
    break   
    
    case "month":
-     if(this.state.Monthly.length==0){
+    
       fetch("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSFT&apikey=demo")
       .then(res=>res.json())
       .then(data=>{
@@ -288,30 +245,6 @@ datechange=(e)=>{
       .catch(err=>{
         console.log(err)
       })
-     }else{
-       const data=this.state.Monthly;
-      const timeSeries=Object.values(data["Monthly Adjusted Time Series"])
-      const date=Object.keys(data["Monthly Adjusted Time Series"]);
-    //console.log(Object.values(date))
-    //console.log(timeSeries[0]["5. adjusted close"])
-  
-    for(let i=0; i<date.length; i++){
-           dataT[0]["data"].unshift(
-            {
-              "x": date[i],
-              "y": timeSeries[i]["5. adjusted close"]
-            }
-           )
-      }
-  
-     // console.log(dataT);
-     this.setState({data:dataT,timeSeries:timeSeries,date:date,loading:false});
-      setTimeout(()=>{
-        this.updateStateForTimeInterval(0,15,date,timeSeries);
-      },10)
-    
-     }
-      
       break
 
       default :
